@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Lars Eric Scheidler"]
   spec.email         = ["lscheidler@liventy.de"]
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
+  spec.summary       = %q{Popen wrapper with additional functionality}
+  spec.description   = %q{Popen wrapper with additional functionality}
   spec.homepage      = "https://github.com/lscheidler/ruby-execute"
   spec.license       = "MIT"
 
@@ -34,4 +34,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency "yard", "~> 0.9.7"
+  spec.add_runtime_dependency "colorize", "~> 0.8.1"
 end

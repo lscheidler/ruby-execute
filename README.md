@@ -20,7 +20,23 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+execute echo command
+```ruby
+status = Execute::execute ['echo', 'hello world']
+
+# print output
+puts status.stdout
+```
+
+execute echo command and print command
+```ruby
+status = Execute::execute ['echo', 'hello world'], print_cmd: true
+```
+
+execute echo command and print output
+```ruby
+status = Execute::execute ['echo', 'hello world'], print_lines: true
+```
 
 ## Development
 
