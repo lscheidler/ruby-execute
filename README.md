@@ -38,6 +38,11 @@ execute echo command and print output
 status = Execute::execute ['echo', 'hello world'], print_lines: true
 ```
 
+execute false command and throw exception, because exitstatus > 0
+```ruby
+status = Execute::execute ['false'], throw_exception: true
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.

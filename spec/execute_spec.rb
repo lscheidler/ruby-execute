@@ -42,6 +42,12 @@ describe Execute do
           Execute.execute ['echo', 'hello world'], print_lines: true
         }.to output("hello world\n").to_stdout
       end
+
+      it 'should raise an exception' do
+        expect {
+          Execute.execute ['false'], raise_exception: true
+        }.to raise_error(Execute::ExecutionFailedException)
+      end
     end
   end
 end

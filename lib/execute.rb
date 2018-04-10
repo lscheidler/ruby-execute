@@ -1,4 +1,5 @@
 require_relative "execute/extended_status"
+require_relative "execute/execution_failed_exception"
 require_relative "execute/version"
 
 # popen wrapper
@@ -11,9 +12,11 @@ module Execute
   # @param dryrun [Bool] do not run command
   # @param print_cmd [Bool] print command, which is going to be executed
   # @param print_lines [Bool] print output lines of command
+  # @param raise_exception [Bool] raise an exception, if command doesn't succeeds
   # @return [Execute::ExtendedStatus] exit status of command
-  def execute cmd, env: {}, io_options: {}, dryrun: false, print_cmd: false, print_lines: false
-    Execute.execute cmd, env: env, io_options: io_options, dryrun: dryrun, print_cmd: print_cmd, print_lines: print_lines
+  # @raise [Execute::ExecutionFailedException]
+  def execute cmd, env: {}, io_options: {}, dryrun: false, print_cmd: false, print_lines: false, raise_exception: false
+    Execute.execute cmd, env: env, io_options: io_options, dryrun: dryrun, print_cmd: print_cmd, print_lines: print_lines, raise_exception: raise_exception
   end
 
   # execute command
@@ -24,18 +27,20 @@ module Execute
   # @param dryrun [Bool] do not run command
   # @param print_cmd [Bool] print command, which is going to be executed
   # @param print_lines [Bool] print output lines of command
+  # @param raise_exception [Bool] raise an exception, if command doesn't succeeds
   # @return [Execute::ExtendedStatus] exit status of command
-  def self.execute cmd, env: {}, io_options: {}, dryrun: false, print_cmd: false, print_lines: false
+  # @raise [Execute::ExecutionFailedException]
+  def self.execute cmd, env: {}, io_options: {}, dryrun: false, print_cmd: false, print_lines: false, raise_exception: false
 
     STDOUT.sync = true
+
+    print_cmd cmd if print_cmd
 
     if dryrun
       stdout = cmd.join(" ")
       stdout_lines = [stdout]
       puts stdout
     else
-      print_cmd cmd if print_cmd
-
       stdout, stdout_lines = IO.popen([env]+cmd+[io_options]) {|io|
         stdout = ""
         stdout_lines = []
@@ -52,6 +57,9 @@ module Execute
     status = Execute::ExtendedStatus.new $?
     status.stdout = stdout
     status.stdout_lines = stdout_lines
+    if raise_exception and not status.success?
+      raise Execute::ExecutionFailedException.new status
+    end
     status
   end
 
